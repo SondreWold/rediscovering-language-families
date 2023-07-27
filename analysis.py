@@ -61,7 +61,7 @@ if __name__ == "__main__":
     lang_averages = []
     #"Finnish", "Hungarian", "Estonian"
     #languages = ["Norwegian","German", "English" ,"Spanish", "French", "Russian" , "Arabic", "Hebrew", "Somali", "Wolaytta", "Tachelhit"]
-    languages_og = ["Wolof", "Xhosa", "Zulu", "Finnish", "Estonian", "Hungarian", "Spanish", "German", "Lithuanian", "Hebrew", "Arabic", "Tachelhit"]
+    languages_og = ["Wolof", "Xhosa", "Zulu", "Ewe", "Finnish", "Estonian", "Hungarian", "Spanish", "German", "Lithuanian", "Russian", "Hebrew", "Arabic", "Tachelhit", "Somali"]
     languages = []
     for language in languages_og:
         embeddings_file = path.join(
@@ -76,7 +76,8 @@ if __name__ == "__main__":
 
         model = load_embedding(embeddings_file)
         sentences = []
-        for line in data_into_list[:200]:
+        random.shuffle(data_into_list)
+        for line in data_into_list[:50]:
             words = line.split(" ")
             words = [w.translate(str.maketrans('', '', string.punctuation)) for w in words]
             sentence_vector = np.mean([model[word] for word in words if word in model], axis=0)
@@ -89,39 +90,36 @@ if __name__ == "__main__":
     n_clusters = 4
     df = pd.DataFrame(languages)
     df["embedding"] = lang_averages
-    clusterer = KMeans(n_clusters=n_clusters, init="k-means++", random_state=42)
-    #clusterer = SpectralClustering(n_clusters=n_clusters, random_state=42)
     matrix = np.vstack(df.embedding.values)
     scaler = StandardScaler()
     scaled_matrix = scaler.fit_transform(matrix)
-    clusterer.fit(scaled_matrix)
-    labels = clusterer.labels_
-    df["cluster"] = labels
-    pca = PCA(n_components=2)
+    pca = PCA(n_components=3)
     results = pca.fit_transform(scaled_matrix)
     results = pd.DataFrame(results)
     results['x'] =results.iloc[0:, 0]
     results['y'] =results.iloc[0:, 1]
+    results['z'] =results.iloc[0:, 2]
     tmp = pd.merge(df, results, left_index=True, right_index=True)
     tmp['language'] =tmp.iloc[0:, 0]
-    df =tmp[['language', 'embedding', 'x', 'y', 'cluster']]
+    df =tmp[['language', 'embedding', 'x', 'y', 'z']]
 
-    fig, ax = plt.subplots()
+    fig = plt.figure(figsize=(14,9))
+    ax = fig.add_subplot(111, projection='3d')
     for category, color in enumerate(["green", "red", "blue", "pink"]):
-        xs = np.array(df["x"])[df.cluster == category]
-        ys = np.array(df["y"])[df.cluster == category]
+        pass
+        #xs = np.array(df["x"])[df.cluster == category]
+        #ys = np.array(df["y"])[df.cluster == category]
         #ax.scatter(xs, ys, color=color, alpha=0.3)
     for i, txt in enumerate(df["language"]):
         #ax.annotate(txt, (df["x"][i], df["y"][i]))
-        if txt in ["Wolof", "Xhosa", "Zulu"]:
-            ax.plot(df["x"][i], df["y"][i], color="green", marker='o', linestyle='', ms=3)
+        if txt in ["Wolof", "Xhosa", "Zulu", "Ewe"]:
+            ax.plot(df["x"][i], df["y"][i], df["z"][i], color="green", marker='o', linestyle='', ms=3)
         if txt in ["Finnish", "Estonian", "Hungarian"]:
-            ax.plot(df["x"][i], df["y"][i], color="red", marker='o', linestyle='', ms=3)
-        if txt in ["Spanish", "German", "Lithuanian"]:
-            ax.plot(df["x"][i], df["y"][i], color="blue", marker='o', linestyle='', ms=3)
-        if txt in ["Hebrew", "Arabic", "Tachelhit"]:
-            ax.plot(df["x"][i], df["y"][i], color="orange", marker='o', linestyle='', ms=3)
-
+            ax.plot(df["x"][i], df["y"][i], df["z"][i], color="red", marker='o', linestyle='', ms=3)
+        if txt in ["Spanish", "German", "Lithuanian", "Russian"]:
+            ax.plot(df["x"][i], df["y"][i], df["z"][i], color="blue", marker='o', linestyle='', ms=3)
+        if txt in ["Hebrew", "Arabic", "Tachelhit", "Somali"]:
+            ax.plot(df["x"][i], df["y"][i], df["z"][i], color="orange", marker='o', linestyle='', ms=3)
 
     import matplotlib.patches as mpatches
     green_patch = mpatches.Patch(color='green', label="Niger-Congo")
