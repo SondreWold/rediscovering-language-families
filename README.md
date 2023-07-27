@@ -7,6 +7,14 @@ This project tries to see if static word embedding models trained on parallel Bi
   <em>A first attempt at seperating some Indo-European and Afro-Asiatic languages (with some errors).</em>
 </p>
 
+<br>
+
+<p align="center">
+  <img width="460" height="300" src="img/four_groups.png">
+  <br>
+  <em>Clustering of 100 observations for three languages in each of the families: Niger-Congo, Uralic, Indo-European, Afro-Asiatic.</em>
+</p>
+
 ## Things to look at 
 
 - How does the embedding size influence the clustering.
