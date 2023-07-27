@@ -12,7 +12,7 @@ This project tries to see if static word embedding models trained on parallel Bi
 <p align="center">
   <img width="460" height="300" src="img/four_groups.png">
   <br>
-  <em>Clustering of 100 observations for three languages in each of the families: Niger-Congo, Uralic, Indo-European, Afro-Asiatic.</em>
+  <em>PCA plot of 100 observations for three languages in each of the families: Niger-Congo, Uralic, Indo-European, Afro-Asiatic.</em>
 </p>
 
 ## Things to look at 
