@@ -40,5 +40,5 @@ As of now:
 - Do PCA on the embeddings.
 - (Cluster using KMeans or Spectral Clustering)
 - Plot the PCA results, coloured by the original gold label (the actual language family)
-- Metric of success: Do the colours cluster together? If so, something interesting might be happening.  
+- Metric of success: Do the colours cluster together? If so, something interesting might be happening despite random initialization and a relatively small corpora per language. If the modeled languages align with the traditional affiliations, then it is possible to construct these traditional language families from semantic distributedness alone; that is, how words in each language's own vocabulary relate to eachother would then be different for the different families. 
 
