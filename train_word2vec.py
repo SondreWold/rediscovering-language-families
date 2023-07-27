@@ -78,5 +78,3 @@ if __name__ == "__main__":
     #logger.info(filename)
     # Save the model without the output vectors (what you most probably want):
     model.wv.save(f'models/{output_name.replace(".txt", ".model")}')
-
-    # model.save(filename)  # If you intend to train the model further
