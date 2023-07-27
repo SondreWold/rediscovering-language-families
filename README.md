@@ -15,6 +15,14 @@ This project tries to see if static word embedding models trained on parallel Bi
   <em>PCA plot of 100 observations for three languages in each of the families: Niger-Congo, Uralic, Indo-European, Afro-Asiatic.</em>
 </p>
 
+<br>
+
+<p align="center">
+  <img width="500" height="350" src="img/3d_plot.png">
+  <br>
+  <em>A 3D PCA plot of 50 observations for 3-5 languages in each of the families: Niger-Congo, Uralic, Indo-European, Afro-Asiatic.</em>
+</p>
+
 ## Things to look at 
 
 - How does the embedding size influence the clustering.
