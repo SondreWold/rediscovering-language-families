@@ -1,16 +1,12 @@
 #!/bin/env python3
 # coding: utf-8
+# Author: Andrey Kutuzov
 
 import gensim
 import logging
 import multiprocessing
 import argparse
 from os import path
-
-# This script trains a word2vec word embedding model using Gensim
-# Example corpus: /fp/projects01/ec30/corpora/enwiki
-# To run this on Fox, load this module:
-# nlpl-gensim/4.3.1-foss-2021a-Python-3.9.5
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

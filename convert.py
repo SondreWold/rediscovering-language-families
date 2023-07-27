@@ -1,10 +1,6 @@
 #!/bin/env python3
 # coding: utf-8
-
-
-# To run this on Fox, load this module:
-# nlpl-gensim/4.3.1-foss-2021a-Python-3.9.5
-
+#Author: Andrey Kutuzov
 import sys
 import gensim
 import logging
