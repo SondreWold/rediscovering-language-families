@@ -18,13 +18,6 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 
-# Simple toy script to get an idea of what one can do with (static) word embedding models using Gensim
-# Models can be found at http://vectors.nlpl.eu/explore/embeddings/models/,
-# or http://vectors.nlpl.eu/repository/,
-# or in the /fp/projects01/ec30/models/static/  directory on Fox
-# (for example, /fp/projects01/ec30/models/static/223/)
-
-
 def load_embedding(modelfile):
     # Detect the model format by its extension:
     # Binary word2vec format:
