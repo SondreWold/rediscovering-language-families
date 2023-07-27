@@ -12,11 +12,12 @@ import string
 from os import path
 import torch
 import numpy as np
-from sklearn.cluster import KMeans, DBSCAN, AffinityPropagation, SpectralClustering
-import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans, DBSCAN, AffinityPropagation, SpectralClustering, MeanShift
+from sklearn.mixture import GaussianMixture
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 
 def load_embedding(modelfile):
     # Detect the model format by its extension:
@@ -59,8 +60,10 @@ if __name__ == "__main__":
 
     lang_averages = []
     #"Finnish", "Hungarian", "Estonian"
-    languages = ["Norwegian","German", "Danish" ,"Spanish", "French", "Russian" , "Arabic", "Hebrew", "Somali", "Wolaytta", "Tachelhit"]
-    for language in languages:
+    #languages = ["Norwegian","German", "English" ,"Spanish", "French", "Russian" , "Arabic", "Hebrew", "Somali", "Wolaytta", "Tachelhit"]
+    languages_og = ["Wolof", "Xhosa", "Zulu", "Finnish", "Estonian", "Hungarian", "Spanish", "German", "Lithuanian", "Hebrew", "Arabic", "Tachelhit"]
+    languages = []
+    for language in languages_og:
         embeddings_file = path.join(
             "./models/", f"{language}.bin"
         )  # Directory containing word embeddings
@@ -73,27 +76,28 @@ if __name__ == "__main__":
 
         model = load_embedding(embeddings_file)
         sentences = []
-        for line in data_into_list:
+        for line in data_into_list[:200]:
             words = line.split(" ")
             words = [w.translate(str.maketrans('', '', string.punctuation)) for w in words]
             sentence_vector = np.mean([model[word] for word in words if word in model], axis=0)
-            if sentence_vector.size == 300:
-                sentences.append(sentence_vector)
-        language_average = np.mean(np.array(sentences), axis=0)
-        lang_averages.append(language_average)
+            if sentence_vector.size == 500:
+                lang_averages.append(sentence_vector)
+                languages.append(language)
+        #language_average = np.mean(np.array(sentences), axis=0)
+        #lang_averages.append(language_average)
 
-    n_clusters = 2
+    n_clusters = 4
     df = pd.DataFrame(languages)
     df["embedding"] = lang_averages
-    #clusterer = clusterer(n_clusters=n_clusters, init="k-means++", random_state=42)
-    clusterer = SpectralClustering(n_clusters=n_clusters)
+    clusterer = KMeans(n_clusters=n_clusters, init="k-means++", random_state=42)
+    #clusterer = SpectralClustering(n_clusters=n_clusters, random_state=42)
     matrix = np.vstack(df.embedding.values)
-    clusterer.fit(matrix)
-    labels = clusterer.labels_
-    df["cluster"] = labels
     scaler = StandardScaler()
     scaled_matrix = scaler.fit_transform(matrix)
-    pca = PCA(n_components=3)
+    clusterer.fit(scaled_matrix)
+    labels = clusterer.labels_
+    df["cluster"] = labels
+    pca = PCA(n_components=2)
     results = pca.fit_transform(scaled_matrix)
     results = pd.DataFrame(results)
     results['x'] =results.iloc[0:, 0]
@@ -103,10 +107,28 @@ if __name__ == "__main__":
     df =tmp[['language', 'embedding', 'x', 'y', 'cluster']]
 
     fig, ax = plt.subplots()
-    for category, color in enumerate(["green", "red"]):
+    for category, color in enumerate(["green", "red", "blue", "pink"]):
         xs = np.array(df["x"])[df.cluster == category]
         ys = np.array(df["y"])[df.cluster == category]
-        ax.scatter(xs, ys, color=color, alpha=0.3)
+        #ax.scatter(xs, ys, color=color, alpha=0.3)
     for i, txt in enumerate(df["language"]):
-        ax.annotate(txt, (df["x"][i], df["y"][i]))
+        #ax.annotate(txt, (df["x"][i], df["y"][i]))
+        if txt in ["Wolof", "Xhosa", "Zulu"]:
+            ax.plot(df["x"][i], df["y"][i], color="green", marker='o', linestyle='', ms=3)
+        if txt in ["Finnish", "Estonian", "Hungarian"]:
+            ax.plot(df["x"][i], df["y"][i], color="red", marker='o', linestyle='', ms=3)
+        if txt in ["Spanish", "German", "Lithuanian"]:
+            ax.plot(df["x"][i], df["y"][i], color="blue", marker='o', linestyle='', ms=3)
+        if txt in ["Hebrew", "Arabic", "Tachelhit"]:
+            ax.plot(df["x"][i], df["y"][i], color="orange", marker='o', linestyle='', ms=3)
+
+
+    import matplotlib.patches as mpatches
+    green_patch = mpatches.Patch(color='green', label="Niger-Congo")
+    red_patch = mpatches.Patch(color='red', label="Uralic")
+    blue_patch = mpatches.Patch(color='blue', label="Indo-European")
+    orange_patch = mpatches.Patch(color='orange', label="Afro-Asiatic")
+
+    plt.legend(handles=[green_patch, red_patch, blue_patch, orange_patch])
+
     plt.show()

@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # How many words types we want to be considered (sorted by frequency)?
     vocabsize = args.vocab
 
-    vectorsize = 300  # Dimensionality of the resulting word embeddings.
+    vectorsize = 500  # Dimensionality of the resulting word embeddings.
 
     # For how many epochs to train a model (how many passes over corpus)?
     iterations = args.epochs
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         data,
         vector_size=vectorsize,
         window=window,
-        workers=cores,
+        workers=1,
         sg=skipgram,
         max_final_vocab=vocabsize,
         epochs=iterations,

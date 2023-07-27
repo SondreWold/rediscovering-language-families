@@ -3,7 +3,7 @@ rm -r parsed_corpora
 mkdir models
 mkdir parsed_corpora
 
-for i in "es Spanish" "no Norwegian" "de German" "en English" "ru Russian" "fi Finnish" "tr Turkish" "et Estonian" "fr French" "it Italian" "hu Hungarian" "is Icelandic" "he Hebrew" "ar Arabic" "shi Tachelhit" "so Somali" "wal Wolaytta"
+for i in "lt Lithuanian" "ee Ewe" "wo Wolof" "xh Xhosa" "zu Zulu" "fi Finnish" "et Estonian" "hu Hungarian" "es Spanish" "de German" "ru Russian" "is Icelandic" "he Hebrew" "ar Arabic" "shi Tachelhit" "so Somali" "wal Wolaytta"
 do
     set -- $i
     echo Starting preprocessing of $2
