@@ -36,8 +36,9 @@ I'm using the translations made available through the paper *A massively paralle
 As of now:
 - Parse source XML to JSON and serialize into a line-by-line corpus.
 - Train a word2vec model either with skipgram or CBOW.
-- Create averaged vectors of each sentence in the Bible per language, then average that again.
-- Cluster
-- Do PCA
-- Plot the PCA results grouped by colour on the clustering labels.
+- Create averaged vectors of a sample of lines from the Bible per language (averaged over words).
+- Cluster using KMeans.
+- Do PCA on the clustered embeddings.
+- Plot the PCA results, coloured by the original gold label (the actual language family)
+- Metric of success: Do the colours cluster together? If so, something interesting might be happening.  
 
